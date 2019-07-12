@@ -82,7 +82,7 @@ router.delete('/:id', validateProjectId, async (req, res) => {
     deletedProject = await db.get();
     res.status(200).json(deletedProject);
   } catch (error) {
-    res.status(500).json({ error: 'Project with ID could not be retrieved' });
+    res.status(500).json({ error: 'Project with ID could not be deleted' });
   }
 });
 
