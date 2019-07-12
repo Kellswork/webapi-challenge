@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const db = require('../data/helpers/actionModel');
+
 
 router.get('/', async (req, res) => {
   try {
@@ -19,7 +21,7 @@ router.get('/:id', validateActionId, async (req, res) => {
   }
 });
 
-router.put('/:id', validateProjectId, validateProjectData, async (req, res) => {
+router.put('/:id', validateActionId, async (req, res) => {
   try {
     const { id } = req.params;
     let upDatedAction = await db.update(id, req.body);
@@ -32,7 +34,7 @@ router.put('/:id', validateProjectId, validateProjectData, async (req, res) => {
   }
 });
 
-router.delete('/:id', validateProjectId, async (req, res) => {
+router.delete('/:id', validateActionId, async (req, res) => {
   try {
     const { id } = req.params;
     const deletedAction = await db.remove(id);
@@ -44,17 +46,17 @@ router.delete('/:id', validateProjectId, async (req, res) => {
 
 // validation middleware
 async function validateActionId(req, res, next) {
-  try {
-    const { id } = req.params;
-    const project = await db.get(id);
+    try {
+        const { id } = req.params;
+        const action = await db.get(id);
     if (!Number(id)) {
       return res.status(400).json({ error: 'the ID provided is not a number' });
-    } else if (!project) {
+    } else if (!action) {
       return res.status(400).json({ error: 'the ID provided is invalid' });
     }
     next();
   } catch (error) {
-    console.log(error.message);
+    res.status(500).json({ error: error.message });
   }
 }
 

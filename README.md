@@ -26,13 +26,24 @@ Demonstrate your understanding of this Sprint's concepts by answering the follow
 
 - [ ] Mention two parts of Express that you learned about this week.
 
+-> express router
+-> middleware
+
 - [ ] Describe Middleware?
+
+-> express applications are basically buildt with middlewares. A middleware is a function and works like a function, it is a function that can return another function. It works based on the order it is placed in the application
 
 - [ ] Describe a Resource?
 
+-> Resource are informations which can be used to peform CRUD operations
+
 - [ ] What can the API return to help clients know if a request was successful?
 
+-> status of 200 
+
 - [ ] How can we partition our application into sub-applications?
+
+-> by putting them in different files or folder
 
 ## Project Setup
 

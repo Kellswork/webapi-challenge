@@ -13,11 +13,11 @@ I need this code, just don't know where, perhaps should make some middleware, do
 Go code!
 */
 const express = require('express');
-const server = require('./server');
+const {server, logger} = require('./server');
 const project = require('./routes/projectRoutes');
 const actions = require('./routes/actionRoutes');
 
-
+server.use(logger);
 server.use(express.json());
 server.use('/api/projects', project);
 server.use('/api/actions', actions);
