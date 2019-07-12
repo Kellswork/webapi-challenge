@@ -1,5 +1,7 @@
 const express = require('express');
 const db = require('../data/helpers/projectModel');
+const actionDb = require('../data/helpers/actionModel');
+
 
 const router = express.Router();
 
@@ -23,14 +25,14 @@ router.get('/:id', validateProjectId, async (req, res) => {
 });
 
 router.get('/:id/actions', validateProjectId, async (req, res) => {
-    try {
-      const { id } = req.params;
-      const actions = await db.getProjectActions(id);
-      res.status(200).json(actions);
-    } catch (error) {
-      res.status(500).json({ error: 'Project with ID could not be retrieved' });
-    }
-  });
+  try {
+    const { id } = req.params;
+    const actions = await db.getProjectActions(id);
+    res.status(200).json(actions);
+  } catch (error) {
+    res.status(500).json({ error: 'Project with ID could not be retrieved' });
+  }
+});
 
 router.post('/', validateProjectData, async (req, res) => {
   try {
@@ -42,6 +44,23 @@ router.post('/', validateProjectData, async (req, res) => {
       .json({ error: 'Project data could not be saved to the database' });
   }
 });
+
+router.post(
+  '/:id/actions',
+  validateProjectId,
+  validateActionData,
+  async (req, res) => {
+    try {
+      const { id } = req.params;
+      const action = await actionDb.insert({ ...req.body, project_id: id });
+      res.status(200).json(action);
+    } catch (error) {
+      res
+        .status(500)
+        .json({ error: error.message });
+    }
+  }
+);
 
 router.put('/:id', validateProjectId, validateProjectData, async (req, res) => {
   try {
@@ -91,6 +110,26 @@ async function validateProjectData(req, res, next) {
     } else if (name === '' || name.length < 3) {
       return res.status(400).json({
         error: 'name is required and cannot be less than 3 characters'
+      });
+    } else if (description === '' || description.length < 5) {
+      return res.status(400).json({
+        error: 'description is required and cannot be less than 5 characters'
+      });
+    }
+    next();
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+async function validateActionData(req, res, next) {
+  try {
+    const { description, notes, project_id} = req.body;
+    if (!notes || !description || !project_id) {
+      return res.status(400).json({ message: 'missing action data' });
+    } else if (notes === '' || notes.length < 3) {
+      return res.status(400).json({
+        error: 'notes is required and cannot be less than 3 characters'
       });
     } else if (description === '' || description.length < 5) {
       return res.status(400).json({

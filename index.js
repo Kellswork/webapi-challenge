@@ -14,7 +14,11 @@ Go code!
 */
 const express = require('express');
 const server = require('./server');
-const project = require('./routes/projectRoute');
+const project = require('./routes/projectRoutes');
+const actions = require('./routes/actionRoutes');
+
 
 server.use(express.json());
 server.use('/api/projects', project);
+server.use('/api/actions', actions);
+
