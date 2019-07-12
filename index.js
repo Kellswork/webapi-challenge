@@ -12,8 +12,9 @@ I need this code, just don't know where, perhaps should make some middleware, do
 
 Go code!
 */
-
+const express = require('express');
 const server = require('./server');
 const project = require('./routes/projectRoute');
 
+server.use(express.json());
 server.use('/api/projects', project);
