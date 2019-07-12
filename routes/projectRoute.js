@@ -22,6 +22,16 @@ router.get('/:id', validateProjectId, async (req, res) => {
   }
 });
 
+router.get('/:id/actions', validateProjectId, async (req, res) => {
+    try {
+      const { id } = req.params;
+      const actions = await db.getProjectActions(id);
+      res.status(200).json(actions);
+    } catch (error) {
+      res.status(500).json({ error: 'Project with ID could not be retrieved' });
+    }
+  });
+
 router.post('/', validateProjectData, async (req, res) => {
   try {
     const project = await db.insert(req.body);
