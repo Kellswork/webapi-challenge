@@ -13,12 +13,14 @@ I need this code, just don't know where, perhaps should make some middleware, do
 Go code!
 */
 const express = require('express');
+const cors = require('cors');
 const {server, logger} = require('./server');
 const project = require('./routes/projectRoutes');
 const actions = require('./routes/actionRoutes');
 
 server.use(logger);
 server.use(express.json());
+server.use(cors());
 server.use('/api/projects', project);
 server.use('/api/actions', actions);
 

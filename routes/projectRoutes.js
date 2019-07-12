@@ -125,7 +125,7 @@ async function validateProjectData(req, res, next) {
 async function validateActionData(req, res, next) {
   try {
     const { description, notes, project_id} = req.body;
-    if (!notes || !description || !project_id) {
+    if (!notes || !description ) {
       return res.status(400).json({ message: 'missing action data' });
     } else if (notes === '' || notes.length < 3) {
       return res.status(400).json({
