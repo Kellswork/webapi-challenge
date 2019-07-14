@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../data/helpers/actionModel');
+const { validateActionId } = require('../validator/actionValidator');
+
 
 
 router.get('/', async (req, res) => {
@@ -43,21 +45,5 @@ router.delete('/:id', validateActionId, async (req, res) => {
     res.status(500).json({ error: 'Action with ID could not be deleted' });
   }
 });
-
-// validation middleware
-async function validateActionId(req, res, next) {
-    try {
-        const { id } = req.params;
-        const action = await db.get(id);
-    if (!Number(id)) {
-      return res.status(400).json({ error: 'the ID provided is not a number' });
-    } else if (!action) {
-      return res.status(400).json({ error: 'the ID provided is invalid' });
-    }
-    next();
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-}
 
 module.exports = router;
